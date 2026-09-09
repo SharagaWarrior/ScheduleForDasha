@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Розклад Занять — Перший Курс</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --badge-bg: #0369a1;
+            --badge-text: #e0f2fe;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Group Selector Switcher */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .group-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .group-btn:hover {
+            border-color: var(--accent);
+            color: var(--text-main);
+        }
+
+        .group-btn.active {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: #0f172a;
+        }
+
+        /* Schedule Layout */
+        .day-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .day-header {
+            background-color: rgba(51, 65, 85, 0.4);
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent);
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .lessons-list {
+            padding: 12px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .lesson-card {
+            background-color: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 12px 16px;
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 16px;
+            align-items: center;
+        }
+
+        @media (max-width: 600px) {
+            .lesson-card {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+
+        .lesson-time {
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .lesson-number {
+            background-color: var(--badge-bg);
+            color: var(--badge-text);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .lesson-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .lesson-title {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+
+        .lesson-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .group-tag {
+            background-color: #334155;
+            color: #cbd5e1;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        footer {
+            margin-top: auto;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Розклад Занять</h1>
+            <p class="subtitle">Перший курс — Факультет міжнародних відноси / ІСТ</p>
+        </header>
+
+        <!-- Group Filter Buttons -->
+        <div class="controls">
+            <button class="group-btn active" onclick="filterGroup('all')">Усі групи</button>
+            <button class="group-btn" onclick="filterGroup('1-1')">Група 1-1</button>
+            <button class="group-btn" onclick="filterGroup('1-2')">Група 1-2</button>
+            <button class="group-btn" onclick="filterGroup('1-3')">Група 1-3</button>
+        </div>
+
+        <div id="schedule-container">
+            <!-- Dynamically populated via JavaScript -->
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Розклад занять | GitHub Pages Deployment</p>
+    </footer>
+
+    <script>
+        const scheduleData = [
+            {
+                day: "Понеділок",
+                lessons: [
+                    { num: "I", time: "Пara I", title: "ПЕРША ІНОЗЕМНА МОВА", lecturer: "ангд. мова / німецька мова відповідно до груп", room: "ауд. 301, 303, 304, 306, 310", groups: ["1-1", "1-2", "1-3"] },
+                    { num: "II", time: "Пara II", title: "ДИПЛОМАТИЧНА ТА КОНСУЛЬСЬКА СЛУЖБА (16/20)", lecturer: "доц. Сивовець П.А. / доц. Купчиенко К.І.", room: "6-10т. - ДКС | 11-13т. - АПСП", groups: ["1-1", "1-2", "1-3"] },
+                    { num: "III", time: "Пara III", title: "АКТУАЛЬНІ ПРОБЛЕМИ СВІТОВОЇ ПОЛІТИКИ", lecturer: "доц. Сивовець П.А.", room: "7-13т. - практ.з Політ. Геогр.", groups: ["1-3"] }
+                ]
+            },
+            {
+                day: "Вівторок",
+                lessons: [
+                    { num: "I", time: "Пara I", title: "АКТУАЛЬНІ ПРОБЛЕМИ СВІТОВОЇ ПОЛІТИКИ", lecturer: "доц. Сивовець П.А.", room: "7,9,11,13т.-практ.з ВДФ", groups: ["1-1", "1-2", "1-3"] },
+                    { num: "II", time: "Пara II", title: "ВСТУП ДО ФАХУ МІЖНАРОДНИХ ВІДНОСИН", lecturer: "доц. Мельниченко Ю.І.", room: "7-13т. - практ.з ВДФ МВ 205 / Політ. Геогр.", groups: ["1-1", "1-2", "1-3"] },
+                    { num: "III", time: "Пara III", title: "АНГЛІЙСЬКА МОВА ЗА ПРОФСПРЯМУВАННЯМ", lecturer: "ангд.мова / німецька мова відповідно до груп", room: "ауд. 26, 308", groups: ["1-1", "1-2", "1-3"] },
+                    { num: "IV", time: "Пara IV", title: "ПОЛІТИЧНА ГЕОГРАФІЯ", lecturer: "доц. Попова М.С.", room: "7-13т. - практ.з Політ.геогр.", groups: ["1-1", "1-3"] }
+                ]
+            },
+            {
+                day: "Середа",
+                lessons: [
+                    { num: "I", time: "Пara I", title: "ІСТОРІЯ УКРАЇНИ", lecturer: "Вінцковський Т.С.", room: "9-13т.-практ.з Іст. Укр.", groups: ["1-2"] },
+                    { num: "II", time: "Пara II", title: "ІСТОРІЯ УКРАЇНИ", lecturer: "Вінцковський Т.С.", room: "9-13т.-практ.з Іст. Укр.", groups: ["1-1", "1-2", "1-3"] },
+                    { num: "III", time: "Пara III", title: "ПЕРША ІНОЗЕМНА МОВА", lecturer: "Дробська мова / Турецька мова / Новогрецька мова", room: "ауд. 306, 36, 304 (1-13т.)", groups: ["1-1", "1-2", "1-3"] },
+                    { num: "IV", time: "Пara IV", title: "ПЕРША ІНОЗЕМНА МОВА", lecturer: "Китайська мова / Японська мова", room: "ауд. 310, 303 (1-11т.)", groups: ["1-1"] }
+                ]
+            },
+            {
+                day: "Четвер",
+                lessons: [
+                    { num: "I", time: "Пara I", title: "АКТУАЛЬНІ ПРОБЛЕМИ СВІТОВОЇ ПОЛІТИКИ", lecturer: "доц. Сивовець П.А.", room: "ауд. —", groups: ["1-1", "1-2", "1-3"] },
+                    { num: "II", time: "Пara II", title: "АНГЛ. МОВА за проф.спрямув.", lecturer: "Мікова Н.М., Номатова Бішуллі, Александрова К.Є., Антонюкова Т.", room: "ауд. —", groups: ["1-1", "1-2", "1-3"] },
+                    { num: "III", time: "Пara III", title: "УКРАЇНСЬКА МОВА ЗА ПРОФЕСІЙНИМ СПРЯМУВАННЯМ", lecturer: "доц. Кіщенко А.М.", room: "3-13т. - практ.з Укр.мови / АПСП", groups: ["1-1", "1-2", "1-3"] },
+                    { num: "IV", time: "Пara IV", title: "УКРАЇНСЬКА МОВА ЗА ПРОФЕСІЙНИМ СПРЯМУВАННЯМ", lecturer: "доц. Кіщенко А.М.", room: "3-13т. - практ.з Укр.мови / АПСП", groups: ["1-1", "1-2", "1-3"] }
+                ]
+            },
+            {
+                day: "П'ятниця",
+                lessons: [
+                    { num: "II", time: "Пara II", title: "ДИПЛОМАТИЧНА ТА КОНСУЛЬСЬКА СЛУЖБА", lecturer: "доц. Сивовець П.А. / ст.викл. Побис Д.К.", room: "7-13т.-практ.з Політ. Географ.", groups: ["1-1", "1-2", "1-3"] },
+                    { num: "III", time: "Пara III", title: "ПОЛІТИЧНА ГЕОГРАФІЯ (20/28)", lecturer: "доц. Попова М.С", room: "7-13т.-практ.з Політ.Геогр.", groups: ["1-1", "1-2", "1-3"] },
+                    { num: "IV", time: "Пara IV", title: "Практичні заняття", lecturer: "—", room: "7-13т.-практ.з Політ. Географ.", groups: ["1-3"] }
+                ]
+            }
+        ];
+
+        function renderSchedule(selectedGroup) {
+            const container = document.getElementById('schedule-container');
+            container.innerHTML = '';
+
+            scheduleData.forEach(dayData => {
+                const filteredLessons = dayData.lessons.filter(lesson => {
+                    if (selectedGroup === 'all') return true;
+                    return lesson.groups.includes(selectedGroup);
+                });
+
+                if (filteredLessons.length === 0) return;
+
+                const daySection = document.createElement('div');
+                daySection.className = 'day-section';
+
+                let lessonsHTML = '';
+                filteredLessons.forEach(lesson => {
+                    const groupsTags = lesson.groups.map(g => `<span class="group-tag">Гр. ${g}</span>`).join(' ');
+                    lessonsHTML += `
+                        <div class="lesson-card">
+                            <div class="lesson-time">
+                                <span class="lesson-number">${lesson.num}</span>
+                                <span>${lesson.time}</span>
+                            </div>
+                            <div class="lesson-details">
+                                <div class="lesson-title">${lesson.title}</div>
+                                <div class="lesson-meta">
+                                    <span>👤 ${lesson.lecturer}</span>
+                                    <span>📍 ${lesson.room}</span>
+                                    <div>${groupsTags}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                daySection.innerHTML = `
+                    <div class="day-header">
+                        <span>${dayData.day}</span>
+                    </div>
+                    <div class="lessons-list">
+                        ${lessonsHTML}
+                    </div>
+                `;
+
+                container.appendChild(daySection);
+            });
+        }
+
+        function filterGroup(group) {
+            document.querySelectorAll('.group-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderSchedule(group);
+        }
+
+        // Initial render
+        renderSchedule('all');
+    </script>
+</body>
+</html>

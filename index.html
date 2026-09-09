@@ -1,325 +1,629 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="uk" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Розклад Занять — Перший Курс</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --card-border: #334155;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent: #38bdf8;
-            --accent-hover: #0ea5e9;
-            --badge-bg: #0369a1;
-            --badge-text: #e0f2fe;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 900px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-
-        h1 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--text-main);
-        }
-
-        p.subtitle {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        /* Group Selector Switcher */
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
-
-        .group-btn {
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            color: var(--text-muted);
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .group-btn:hover {
-            border-color: var(--accent);
-            color: var(--text-main);
-        }
-
-        .group-btn.active {
-            background-color: var(--accent);
-            border-color: var(--accent);
-            color: #0f172a;
-        }
-
-        /* Schedule Layout */
-        .day-section {
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-        }
-
-        .day-header {
-            background-color: rgba(51, 65, 85, 0.4);
-            padding: 12px 20px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--accent);
-            border-bottom: 1px solid var(--card-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .lessons-list {
-            padding: 12px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .lesson-card {
-            background-color: rgba(15, 23, 42, 0.5);
-            border: 1px solid var(--card-border);
-            border-radius: 8px;
-            padding: 12px 16px;
-            display: grid;
-            grid-template-columns: 80px 1fr;
-            gap: 16px;
-            align-items: center;
-        }
-
-        @media (max-width: 600px) {
-            .lesson-card {
-                grid-template-columns: 1fr;
-                gap: 8px;
+    <title>Розклад Занять — ПЕРШИЙ КУРС | Ф6 ІСТ</title>
+    <!-- Google Fonts: Syne for brutalist/avant-garde display, Space Grotesk for crisp technical details -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS for structure -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Syne', 'sans-serif'],
+                        mono: ['Space Grotesk', 'monospace'],
+                        sans: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        neon: '#CCFF00',
+                        obsidian: '#090A0F',
+                        surface: '#13151D',
+                        borderc: '#262A38',
+                    }
+                }
             }
         }
-
-        .lesson-time {
-            font-weight: 600;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+    </script>
+    <style>
+        /* Custom Noise Texture Overlay */
+        .bg-noise {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090A0F;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #262A38;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #CCFF00;
         }
 
-        .lesson-number {
-            background-color: var(--badge-bg);
-            color: var(--badge-text);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.8rem;
+        @keyframes reveal {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
-        .lesson-details {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .lesson-title {
-            font-weight: 600;
-            font-size: 1rem;
-            color: var(--text-main);
-        }
-
-        .lesson-meta {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .group-tag {
-            background-color: #334155;
-            color: #cbd5e1;
-            padding: 1px 6px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        footer {
-            margin-top: auto;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            padding: 20px 0;
+        .animate-reveal {
+            animation: reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
     </style>
 </head>
-<body>
+<body class="bg-obsidian text-zinc-100 font-sans antialiased min-h-screen selection:bg-neon selection:text-obsidian relative overflow-x-hidden">
+    <!-- Atmospheric Noise & Glow Background Elements -->
+    <div class="absolute inset-0 bg-noise pointer-events-none fixed z-50"></div>
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-neon/5 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute bottom-1/3 right-10 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[150px] pointer-events-none"></div>
 
-    <div class="container">
-        <header>
-            <h1>Розклад Занять</h1>
-            <p class="subtitle">Перший курс — Факультет міжнародних відноси / ІСТ</p>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+        
+        <!-- Header Section -->
+        <header class="mb-12 animate-reveal opacity-0" style="animation-delay: 0.1s;">
+            <div class="flex flex-col md:flex-row md:items-end justify-between border-b border-borderc pb-8 gap-6">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface border border-borderc text-xs font-mono text-neon mb-4 tracking-wider uppercase">
+                        <span class="w-2 h-2 rounded-full bg-neon animate-pulse"></span>
+                        Одеський національний університет ім. І.І. Мечникова
+                    </div>
+                    <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight uppercase">
+                        Перший <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon to-emerald-400">Курс</span>
+                    </h1>
+                </div>
+                
+                <!-- Group Selector / Tabs -->
+                <div class="flex flex-wrap gap-2 bg-surface p-1.5 rounded-xl border border-borderc">
+                    <button onclick="switchGroup('all')" id="btn-all" class="group-tab px-4 py-2 rounded-lg text-xs font-mono tracking-wider uppercase transition-all duration-300 bg-neon text-obsidian font-bold">
+                        Усі групи
+                    </button>
+                    <button onclick="switchGroup('1-1')" id="btn-1-1" class="group-tab px-4 py-2 rounded-lg text-xs font-mono tracking-wider uppercase transition-all duration-300 text-zinc-400 hover:text-white">
+                        Група 1-1
+                    </button>
+                    <button onclick="switchGroup('1-2')" id="btn-1-2" class="group-tab px-4 py-2 rounded-lg text-xs font-mono tracking-wider uppercase transition-all duration-300 text-zinc-400 hover:text-white">
+                        Група 1-2
+                    </button>
+                    <button onclick="switchGroup('1-3')" id="btn-1-3" class="group-tab px-4 py-2 rounded-lg text-xs font-mono tracking-wider uppercase transition-all duration-300 text-zinc-400 hover:text-white">
+                        Група 1-3
+                    </button>
+                </div>
+            </div>
         </header>
 
-        <!-- Group Filter Buttons -->
-        <div class="controls">
-            <button class="group-btn active" onclick="filterGroup('all')">Усі групи</button>
-            <button class="group-btn" onclick="filterGroup('1-1')">Група 1-1</button>
-            <button class="group-btn" onclick="filterGroup('1-2')">Група 1-2</button>
-            <button class="group-btn" onclick="filterGroup('1-3')">Група 1-3</button>
-        </div>
-
-        <div id="schedule-container">
-            <!-- Dynamically populated via JavaScript -->
-        </div>
-    </div>
-
-    <footer>
-        <p>&copy; 2026 Розклад занять | GitHub Pages Deployment</p>
-    </footer>
-
-    <script>
-        const scheduleData = [
-            {
-                day: "Понеділок",
-                lessons: [
-                    { num: "I", time: "Пara I", title: "ПЕРША ІНОЗЕМНА МОВА", lecturer: "ангд. мова / німецька мова відповідно до груп", room: "ауд. 301, 303, 304, 306, 310", groups: ["1-1", "1-2", "1-3"] },
-                    { num: "II", time: "Пara II", title: "ДИПЛОМАТИЧНА ТА КОНСУЛЬСЬКА СЛУЖБА (16/20)", lecturer: "доц. Сивовець П.А. / доц. Купчиенко К.І.", room: "6-10т. - ДКС | 11-13т. - АПСП", groups: ["1-1", "1-2", "1-3"] },
-                    { num: "III", time: "Пara III", title: "АКТУАЛЬНІ ПРОБЛЕМИ СВІТОВОЇ ПОЛІТИКИ", lecturer: "доц. Сивовець П.А.", room: "7-13т. - практ.з Політ. Геогр.", groups: ["1-3"] }
-                ]
-            },
-            {
-                day: "Вівторок",
-                lessons: [
-                    { num: "I", time: "Пara I", title: "АКТУАЛЬНІ ПРОБЛЕМИ СВІТОВОЇ ПОЛІТИКИ", lecturer: "доц. Сивовець П.А.", room: "7,9,11,13т.-практ.з ВДФ", groups: ["1-1", "1-2", "1-3"] },
-                    { num: "II", time: "Пara II", title: "ВСТУП ДО ФАХУ МІЖНАРОДНИХ ВІДНОСИН", lecturer: "доц. Мельниченко Ю.І.", room: "7-13т. - практ.з ВДФ МВ 205 / Політ. Геогр.", groups: ["1-1", "1-2", "1-3"] },
-                    { num: "III", time: "Пara III", title: "АНГЛІЙСЬКА МОВА ЗА ПРОФСПРЯМУВАННЯМ", lecturer: "ангд.мова / німецька мова відповідно до груп", room: "ауд. 26, 308", groups: ["1-1", "1-2", "1-3"] },
-                    { num: "IV", time: "Пara IV", title: "ПОЛІТИЧНА ГЕОГРАФІЯ", lecturer: "доц. Попова М.С.", room: "7-13т. - практ.з Політ.геогр.", groups: ["1-1", "1-3"] }
-                ]
-            },
-            {
-                day: "Середа",
-                lessons: [
-                    { num: "I", time: "Пara I", title: "ІСТОРІЯ УКРАЇНИ", lecturer: "Вінцковський Т.С.", room: "9-13т.-практ.з Іст. Укр.", groups: ["1-2"] },
-                    { num: "II", time: "Пara II", title: "ІСТОРІЯ УКРАЇНИ", lecturer: "Вінцковський Т.С.", room: "9-13т.-практ.з Іст. Укр.", groups: ["1-1", "1-2", "1-3"] },
-                    { num: "III", time: "Пara III", title: "ПЕРША ІНОЗЕМНА МОВА", lecturer: "Дробська мова / Турецька мова / Новогрецька мова", room: "ауд. 306, 36, 304 (1-13т.)", groups: ["1-1", "1-2", "1-3"] },
-                    { num: "IV", time: "Пara IV", title: "ПЕРША ІНОЗЕМНА МОВА", lecturer: "Китайська мова / Японська мова", room: "ауд. 310, 303 (1-11т.)", groups: ["1-1"] }
-                ]
-            },
-            {
-                day: "Четвер",
-                lessons: [
-                    { num: "I", time: "Пara I", title: "АКТУАЛЬНІ ПРОБЛЕМИ СВІТОВОЇ ПОЛІТИКИ", lecturer: "доц. Сивовець П.А.", room: "ауд. —", groups: ["1-1", "1-2", "1-3"] },
-                    { num: "II", time: "Пara II", title: "АНГЛ. МОВА за проф.спрямув.", lecturer: "Мікова Н.М., Номатова Бішуллі, Александрова К.Є., Антонюкова Т.", room: "ауд. —", groups: ["1-1", "1-2", "1-3"] },
-                    { num: "III", time: "Пara III", title: "УКРАЇНСЬКА МОВА ЗА ПРОФЕСІЙНИМ СПРЯМУВАННЯМ", lecturer: "доц. Кіщенко А.М.", room: "3-13т. - практ.з Укр.мови / АПСП", groups: ["1-1", "1-2", "1-3"] },
-                    { num: "IV", time: "Пara IV", title: "УКРАЇНСЬКА МОВА ЗА ПРОФЕСІЙНИМ СПРЯМУВАННЯМ", lecturer: "доц. Кіщенко А.М.", room: "3-13т. - практ.з Укр.мови / АПСП", groups: ["1-1", "1-2", "1-3"] }
-                ]
-            },
-            {
-                day: "П'ятниця",
-                lessons: [
-                    { num: "II", time: "Пara II", title: "ДИПЛОМАТИЧНА ТА КОНСУЛЬСЬКА СЛУЖБА", lecturer: "доц. Сивовець П.А. / ст.викл. Побис Д.К.", room: "7-13т.-практ.з Політ. Географ.", groups: ["1-1", "1-2", "1-3"] },
-                    { num: "III", time: "Пara III", title: "ПОЛІТИЧНА ГЕОГРАФІЯ (20/28)", lecturer: "доц. Попова М.С", room: "7-13т.-практ.з Політ.Геогр.", groups: ["1-1", "1-2", "1-3"] },
-                    { num: "IV", time: "Пara IV", title: "Практичні заняття", lecturer: "—", room: "7-13т.-практ.з Політ. Географ.", groups: ["1-3"] }
-                ]
-            }
-        ];
-
-        function renderSchedule(selectedGroup) {
-            const container = document.getElementById('schedule-container');
-            container.innerHTML = '';
-
-            scheduleData.forEach(dayData => {
-                const filteredLessons = dayData.lessons.filter(lesson => {
-                    if (selectedGroup === 'all') return true;
-                    return lesson.groups.includes(selectedGroup);
-                });
-
-                if (filteredLessons.length === 0) return;
-
-                const daySection = document.createElement('div');
-                daySection.className = 'day-section';
-
-                let lessonsHTML = '';
-                filteredLessons.forEach(lesson => {
-                    const groupsTags = lesson.groups.map(g => `<span class="group-tag">Гр. ${g}</span>`).join(' ');
-                    lessonsHTML += `
-                        <div class="lesson-card">
-                            <div class="lesson-time">
-                                <span class="lesson-number">${lesson.num}</span>
-                                <span>${lesson.time}</span>
+        <!-- Main Schedule Grid Container -->
+        <main class="space-y-8 animate-reveal opacity-0" style="animation-delay: 0.3s;">
+            
+            <!-- DAY: ПОНЕДІЛОК -->
+            <div class="day-section bg-surface/40 backdrop-blur-md rounded-2xl border border-borderc overflow-hidden transition-all duration-300 hover:border-borderc/80">
+                <div class="bg-surface/80 px-6 py-4 border-b border-borderc flex justify-between items-center">
+                    <h2 class="font-display text-xl sm:text-2xl font-bold tracking-wide uppercase text-neon flex items-center gap-3">
+                        <span class="text-xs font-mono px-2 py-0.5 rounded bg-neon/10 border border-neon/30 text-neon">ДЕНЬ 01</span>
+                        Понеділок
+                    </h2>
+                    <span class="text-xs font-mono text-zinc-500">Academic Schedule</span>
+                </div>
+                
+                <div class="divide-y divide-borderc">
+                    <!-- Para I -->
+                    <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-2 font-mono text-sm text-zinc-400 flex lg:flex-col gap-2">
+                            <span class="text-neon font-bold text-lg">I пара</span>
+                            <span>2-13 т.</span>
+                        </div>
+                        <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-1">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Група 1-1</div>
+                                <div class="font-semibold text-sm mb-2">Перша іноземна мова</div>
+                                <div class="text-xs text-zinc-400 font-mono">Ауд. 301, 303, 304, 306, 310</div>
                             </div>
-                            <div class="lesson-details">
-                                <div class="lesson-title">${lesson.title}</div>
-                                <div class="lesson-meta">
-                                    <span>👤 ${lesson.lecturer}</span>
-                                    <span>📍 ${lesson.room}</span>
-                                    <div>${groupsTags}</div>
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-2">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Група 1-2</div>
+                                <div class="font-semibold text-sm mb-2">Перша іноземна мова <span class="text-zinc-500 text-xs font-normal">(англійська / німецька)</span></div>
+                                <div class="text-xs text-zinc-400 font-mono">Ауд. 301, 303, 304, 306, 310</div>
+                            </div>
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-3">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Група 1-3 & Загальне</div>
+                                <div class="font-semibold text-sm mb-2">Перша іноземна мова</div>
+                                <div class="text-xs text-zinc-400 font-mono">Ауд. 301, 303, 304, 306, 310</div>
+                                <div class="mt-3 pt-2 border-t border-borderc/50 text-[11px] text-zinc-500 font-mono">Також: 2-13т. (0/0)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Para II -->
+                    <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-2 font-mono text-sm text-zinc-400 flex lg:flex-col gap-2">
+                            <span class="text-neon font-bold text-lg">II пара</span>
+                            <span>2-5 т.</span>
+                        </div>
+                        <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-1">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Група 1-1</div>
+                                <div class="font-semibold text-sm mb-1">Дипломатична та консульська служба <span class="text-xs text-zinc-500 font-mono">(16/20)</span></div>
+                                <div class="text-xs text-zinc-300 mb-2">Доц. Сивовець П.А. / доц. Купченко К.І.</div>
+                                <div class="text-xs text-zinc-400 font-mono mb-2">Ауд. ___</div>
+                                <div class="text-[11px] text-zinc-400 font-mono bg-surface p-2 rounded border border-borderc">
+                                    6-10т. — ДКС (ауд. АПСП)<br>
+                                    11-13т. — АПСП
+                                </div>
+                            </div>
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-2">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Група 1-2</div>
+                                <div class="font-semibold text-sm mb-1">Дипломатична та консульська служба</div>
+                                <div class="text-xs text-zinc-300 mb-2">Доц. Сивовець П.А.</div>
+                                <div class="text-xs text-zinc-400 font-mono mb-2">Ауд. ___</div>
+                                <div class="text-[11px] text-zinc-400 font-mono bg-surface p-2 rounded border border-borderc">
+                                    6-10т. — ДКС<br>
+                                    11-13т. — АПСП
+                                </div>
+                            </div>
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-3">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Група 1-3</div>
+                                <div class="font-semibold text-sm mb-1">Дипломатична та консульська служба</div>
+                                <div class="text-xs text-zinc-300 mb-2">Доц. Сивовець П.А.</div>
+                                <div class="text-xs text-zinc-400 font-mono mb-2">Ауд. ___</div>
+                                <div class="text-[11px] text-zinc-400 font-mono bg-surface p-2 rounded border border-borderc">
+                                    6-10т. — ДКС<br>
+                                    11-13т. — АПСП
                                 </div>
                             </div>
                         </div>
-                    `;
+                    </div>
+
+                    <!-- Para III -->
+                    <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-2 font-mono text-sm text-zinc-400 flex lg:flex-col gap-2">
+                            <span class="text-neon font-bold text-lg">III пара</span>
+                            <span>2-5 т.</span>
+                        </div>
+                        <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-1 md:col-span-2">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Групи 1-1, 1-2</div>
+                                <div class="font-semibold text-sm mb-1">Актуальні проблеми світової політики</div>
+                                <div class="text-xs text-zinc-300 mb-2">Доц. Сивовець П.А.</div>
+                                <div class="text-xs text-zinc-400 font-mono">Ауд. ___</div>
+                            </div>
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-3">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Група 1-3</div>
+                                <div class="font-semibold text-sm mb-1">Актуальні проблеми світової політики</div>
+                                <div class="text-xs text-zinc-300 mb-2">7-13т. — практ. з Політ. Геогр.</div>
+                                <div class="text-xs text-zinc-400 font-mono">2-1т. (0/0)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAY: ВІВТОРОК -->
+            <div class="day-section bg-surface/40 backdrop-blur-md rounded-2xl border border-borderc overflow-hidden transition-all duration-300 hover:border-borderc/80">
+                <div class="bg-surface/80 px-6 py-4 border-b border-borderc flex justify-between items-center">
+                    <h2 class="font-display text-xl sm:text-2xl font-bold tracking-wide uppercase text-neon flex items-center gap-3">
+                        <span class="text-xs font-mono px-2 py-0.5 rounded bg-neon/10 border border-neon/30 text-neon">ДЕНЬ 02</span>
+                        Вівторок
+                    </h2>
+                    <span class="text-xs font-mono text-zinc-500">Academic Schedule</span>
+                </div>
+                
+                <div class="divide-y divide-borderc">
+                    <!-- Para I -->
+                    <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-2 font-mono text-sm text-zinc-400 flex lg:flex-col gap-2">
+                            <span class="text-neon font-bold text-lg">I пара</span>
+                            <span>2-5 т.</span>
+                        </div>
+                        <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-1 md:col-span-2">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Групи 1-1, 1-2, 1-3</div>
+                                <div class="font-semibold text-sm mb-1">Актуальні проблеми світової політики</div>
+                                <div class="text-xs text-zinc-300 mb-2">Доц. Сивовець П.А.</div>
+                                <div class="text-xs text-zinc-400 font-mono">7, 9, 11, 13т. — практ. з ВДФ</div>
+                            </div>
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-3">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Додатково</div>
+                                <div class="text-xs text-zinc-400 font-mono">1-2т. (0/0)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Para II -->
+                    <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-2 font-mono text-sm text-zinc-400 flex lg:flex-col gap-2">
+                            <span class="text-neon font-bold text-lg">II пара</span>
+                            <span>1-6т.</span>
+                        </div>
+                        <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-1 md:col-span-2">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Групи 1-1, 1-2</div>
+                                <div class="font-semibold text-sm mb-1">Вступ до фаху міжнародних відносин <span class="text-xs text-zinc-500 font-mono">(16/14 год.)</span></div>
+                                <div class="text-xs text-zinc-300 mb-2">Доц. Мельниченко Ю.І.</div>
+                                <div class="text-xs text-zinc-400 font-mono">
+                                    7-13т. — практ. з ВДФ МВ (ауд. 205) / Політ. Геогр.
+                                </div>
+                            </div>
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-3">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Група 1-3</div>
+                                <div class="font-semibold text-sm mb-1">Перша іноземна мова</div>
+                                <div class="text-xs text-zinc-400 font-mono">Практичні заняття</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Para III -->
+                    <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-2 font-mono text-sm text-zinc-400 flex lg:flex-col gap-2">
+                            <span class="text-neon font-bold text-lg">III пара</span>
+                            <span>2-12т.</span>
+                        </div>
+                        <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-1 md:col-span-2">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Групи 1-1, 1-2, 1-3</div>
+                                <div class="font-semibold text-sm mb-1">Англійська мова за профспрямуванням <span class="text-xs text-zinc-500 font-mono">(анг./нім. відповідно до груп)</span></div>
+                                <div class="text-xs text-zinc-400 font-mono">Ауд. 26, 308</div>
+                            </div>
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-3">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Група 1-3</div>
+                                <div class="text-xs text-zinc-400 font-mono">1-2т. (0/0)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Para IV -->
+                    <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-2 font-mono text-sm text-zinc-400 flex lg:flex-col gap-2">
+                            <span class="text-neon font-bold text-lg">IV пара</span>
+                            <span>2-5т.</span>
+                        </div>
+                        <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-1">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Група 1-1</div>
+                                <div class="font-semibold text-sm mb-1">Політична географія</div>
+                                <div class="text-xs text-zinc-300 mb-2">Доц. Попова М.С.</div>
+                                <div class="text-xs text-zinc-400 font-mono mb-2">Ауд. ___</div>
+                                <div class="text-[11px] text-zinc-400 font-mono">7-13т. — практ. Політ. геогр.</div>
+                            </div>
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-2">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Група 1-2</div>
+                                <div class="font-semibold text-sm mb-1">Політична географія</div>
+                                <div class="text-xs text-zinc-300 mb-2">Доц. Попова М.С.</div>
+                                <div class="text-xs text-zinc-400 font-mono">Ауд. ___</div>
+                            </div>
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-3">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Група 1-3</div>
+                                <div class="font-semibold text-sm mb-1">Політична географія</div>
+                                <div class="text-xs text-zinc-300 mb-2">Доц. Попова М.С.</div>
+                                <div class="text-xs text-zinc-400 font-mono mb-2">Ауд. ___</div>
+                                <div class="text-[11px] text-zinc-400 font-mono">7-13т. — практ. ВДФ</div>
+                                <div class="mt-2 text-xs text-zinc-500 font-mono">9-5т., 1-4т.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAY: СЕРЕДА -->
+            <div class="day-section bg-surface/40 backdrop-blur-md rounded-2xl border border-borderc overflow-hidden transition-all duration-300 hover:border-borderc/80">
+                <div class="bg-surface/80 px-6 py-4 border-b border-borderc flex justify-between items-center">
+                    <h2 class="font-display text-xl sm:text-2xl font-bold tracking-wide uppercase text-neon flex items-center gap-3">
+                        <span class="text-xs font-mono px-2 py-0.5 rounded bg-neon/10 border border-neon/30 text-neon">ДЕНЬ 03</span>
+                        Середа
+                    </h2>
+                    <span class="text-xs font-mono text-zinc-500">Academic Schedule</span>
+                </div>
+                
+                <div class="divide-y divide-borderc">
+                    <!-- Para I -->
+                    <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-2 font-mono text-sm text-zinc-400 flex lg:flex-col gap-2">
+                            <span class="text-neon font-bold text-lg">I пара</span>
+                            <span>3-4т.</span>
+                        </div>
+                        <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-1 md:col-span-2">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Групи 1-1, 1-2, 1-3</div>
+                                <div class="font-semibold text-sm mb-1">Історія України</div>
+                                <div class="text-xs text-zinc-300 mb-2">Вінцковський Т.С.</div>
+                                <div class="text-xs text-zinc-400 font-mono">Ауд. ___ | 9-13т. — практ. з Іст. Укр.</div>
+                            </div>
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-3">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Додатково</div>
+                                <div class="text-xs text-zinc-400 font-mono">1-2т. (0/0)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Para II -->
+                    <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-2 font-mono text-sm text-zinc-400 flex lg:flex-col gap-2">
+                            <span class="text-neon font-bold text-lg">II пара</span>
+                            <span>1-8т.</span>
+                        </div>
+                        <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-1 md:col-span-2">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Групи 1-1, 1-2, 1-3</div>
+                                <div class="font-semibold text-sm mb-1">Історія України</div>
+                                <div class="text-xs text-zinc-300 mb-2">Вінцковський Т.С.</div>
+                                <div class="text-xs text-zinc-400 font-mono">Ауд. ___ | 9-13т. — практ. з Іст. Укр.</div>
+                            </div>
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-3">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Додатково</div>
+                                <div class="text-xs text-zinc-400 font-mono">1-2т. (0/0)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Para III -->
+                    <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-2 font-mono text-sm text-zinc-400 flex lg:flex-col gap-2">
+                            <span class="text-neon font-bold text-lg">III пара</span>
+                            <span>1-13т.</span>
+                        </div>
+                        <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-1 md:col-span-3">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Усі групи</div>
+                                <div class="font-semibold text-sm mb-2">Перша іноземна мова (За вибором)</div>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
+                                    <div class="bg-surface p-2.5 rounded border border-borderc">
+                                        <span class="text-zinc-400 block mb-1">Арабська мова</span>
+                                        <span class="text-neon">Ауд. 306</span>
+                                    </div>
+                                    <div class="bg-surface p-2.5 rounded border border-borderc">
+                                        <span class="text-zinc-400 block mb-1">Турецька мова</span>
+                                        <span class="text-neon">Ауд. 36</span>
+                                    </div>
+                                    <div class="bg-surface p-2.5 rounded border border-borderc">
+                                        <span class="text-zinc-400 block mb-1">Новогрецька мова</span>
+                                        <span class="text-neon">Ауд. 304</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Para IV -->
+                    <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-2 font-mono text-sm text-zinc-400 flex lg:flex-col gap-2">
+                            <span class="text-neon font-bold text-lg">IV пара</span>
+                            <span>1-11 т.</span>
+                        </div>
+                        <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-1 md:col-span-3">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Усі групи</div>
+                                <div class="font-semibold text-sm mb-2">Перша іноземна мова (Східні мови)</div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs">
+                                    <div class="bg-surface p-2.5 rounded border border-borderc">
+                                        <span class="text-zinc-400 block mb-1">Китайська мова</span>
+                                        <span class="text-neon">Ауд. 310</span>
+                                    </div>
+                                    <div class="bg-surface p-2.5 rounded border border-borderc">
+                                        <span class="text-zinc-400 block mb-1">Японська мова</span>
+                                        <span class="text-neon">Ауд. 303</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAY: ЧЕТВЕР -->
+            <div class="day-section bg-surface/40 backdrop-blur-md rounded-2xl border border-borderc overflow-hidden transition-all duration-300 hover:border-borderc/80">
+                <div class="bg-surface/80 px-6 py-4 border-b border-borderc flex justify-between items-center">
+                    <h2 class="font-display text-xl sm:text-2xl font-bold tracking-wide uppercase text-neon flex items-center gap-3">
+                        <span class="text-xs font-mono px-2 py-0.5 rounded bg-neon/10 border border-neon/30 text-neon">ДЕНЬ 04</span>
+                        Четвер
+                    </h2>
+                    <span class="text-xs font-mono text-zinc-500">Academic Schedule</span>
+                </div>
+                
+                <div class="divide-y divide-borderc">
+                    <!-- Para I -->
+                    <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-2 font-mono text-sm text-zinc-400 flex lg:flex-col gap-2">
+                            <span class="text-neon font-bold text-lg">I пара</span>
+                            <span>1,2т.</span>
+                        </div>
+                        <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-1 md:col-span-2">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Групи 1-1, 1-2, 1-3</div>
+                                <div class="font-semibold text-sm mb-1">Актуальні проблеми світової політики</div>
+                                <div class="text-xs text-zinc-300 mb-2">Доц. Сивовець П.А.</div>
+                                <div class="text-xs text-zinc-400 font-mono">Ауд. ___</div>
+                            </div>
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-3">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Додатково</div>
+                                <div class="text-xs text-zinc-400 font-mono">1-2т. (0/0)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Para II -->
+                    <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-2 font-mono text-sm text-zinc-400 flex lg:flex-col gap-2">
+                            <span class="text-neon font-bold text-lg">II пара</span>
+                            <span>1-13т.</span>
+                        </div>
+                        <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-1 md:col-span-3">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Усі групи</div>
+                                <div class="font-semibold text-sm mb-2">Англійська мова за профспрямуванням</div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 font-mono text-xs">
+                                    <div class="bg-surface p-2.5 rounded border border-borderc">
+                                        <span class="text-zinc-400 block text-[10px]">Мікова Н.М.</span>
+                                        <span class="text-zinc-200">Ауд. ___</span>
+                                    </div>
+                                    <div class="bg-surface p-2.5 rounded border border-borderc">
+                                        <span class="text-zinc-400 block text-[10px]">Хоматова Бішуллі</span>
+                                        <span class="text-zinc-200">Ауд. (11)</span>
+                                    </div>
+                                    <div class="bg-surface p-2.5 rounded border border-borderc">
+                                        <span class="text-zinc-400 block text-[10px]">Александрова К.Є.</span>
+                                        <span class="text-zinc-200">Ауд. ___</span>
+                                    </div>
+                                    <div class="bg-surface p-2.5 rounded border border-borderc">
+                                        <span class="text-zinc-400 block text-[10px]">Антонюкрова Т.</span>
+                                        <span class="text-zinc-200">Ауд. (11)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Para III & IV -->
+                    <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-2 font-mono text-sm text-zinc-400 flex lg:flex-col gap-2">
+                            <span class="text-neon font-bold text-lg">III - IV пара</span>
+                            <span>1,2т. / 3-13т.</span>
+                        </div>
+                        <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-1">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Група 1-1</div>
+                                <div class="font-semibold text-sm mb-1">Українська мова за професійним спрямуванням</div>
+                                <div class="text-xs text-zinc-300 mb-2">Доц. Кіщенко А.М.</div>
+                                <div class="text-xs text-zinc-400 font-mono">3-13т. — практ. з АПСП / Укр. мови</div>
+                            </div>
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-2">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Група 1-2</div>
+                                <div class="font-semibold text-sm mb-1">Українська мова за професійним спрямуванням</div>
+                                <div class="text-xs text-zinc-300 mb-2">Доц. Кіщенко А.М.</div>
+                                <div class="text-xs text-zinc-400 font-mono">3-13т. — практ. з АПСП / Укр. мови</div>
+                            </div>
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-3">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Група 1-3</div>
+                                <div class="font-semibold text-sm mb-1">Українська мова за професійним спрямуванням</div>
+                                <div class="text-xs text-zinc-300 mb-2">Доц. Кіщенко А.М.</div>
+                                <div class="text-xs text-zinc-400 font-mono">3-13т. — практ. з АПСП</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAY: П'ЯТНИЦЯ -->
+            <div class="day-section bg-surface/40 backdrop-blur-md rounded-2xl border border-borderc overflow-hidden transition-all duration-300 hover:border-borderc/80">
+                <div class="bg-surface/80 px-6 py-4 border-b border-borderc flex justify-between items-center">
+                    <h2 class="font-display text-xl sm:text-2xl font-bold tracking-wide uppercase text-neon flex items-center gap-3">
+                        <span class="text-xs font-mono px-2 py-0.5 rounded bg-neon/10 border border-neon/30 text-neon">ДЕНЬ 05</span>
+                        П'ятниця
+                    </h2>
+                    <span class="text-xs font-mono text-zinc-500">Academic Schedule</span>
+                </div>
+                
+                <div class="divide-y divide-borderc">
+                    <!-- Para II -->
+                    <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-2 font-mono text-sm text-zinc-400 flex lg:flex-col gap-2">
+                            <span class="text-neon font-bold text-lg">II пара</span>
+                            <span>2-5т. (15:50)</span>
+                        </div>
+                        <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-1 md:col-span-2">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Групи 1-1, 1-2</div>
+                                <div class="font-semibold text-sm mb-1">Дипломатична та консульська служба <span class="text-xs text-zinc-500 font-mono">(16/20 год.)</span></div>
+                                <div class="text-xs text-zinc-300 mb-2">Доц. Сивовець П.А. / ст. викл. Побис Д.К.</div>
+                                <div class="text-xs text-zinc-400 font-mono">Ауд. ___ | 7-13т. — практ. з Політ. Географ.</div>
+                            </div>
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-3">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Група 1-3</div>
+                                <div class="text-xs text-zinc-400 font-mono">1-2т.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Para III -->
+                    <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-2 font-mono text-sm text-zinc-400 flex lg:flex-col gap-2">
+                            <span class="text-neon font-bold text-lg">III пара</span>
+                            <span>1-6т.</span>
+                        </div>
+                        <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-1 md:col-span-2">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Групи 1-1, 1-2</div>
+                                <div class="font-semibold text-sm mb-1">Політична географія <span class="text-xs text-zinc-500 font-mono">(20/28)</span></div>
+                                <div class="text-xs text-zinc-300 mb-2">Доц. Попова М.С.</div>
+                                <div class="text-xs text-zinc-400 font-mono">Ауд. ___ | 7-13т. — практ. з Політ. Геогр.</div>
+                            </div>
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-3">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Група 1-3</div>
+                                <div class="text-xs text-zinc-400 font-mono">1-2т.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Para IV -->
+                    <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-2 font-mono text-sm text-zinc-400 flex lg:flex-col gap-2">
+                            <span class="text-neon font-bold text-lg">IV пара</span>
+                            <span>—</span>
+                        </div>
+                        <div class="lg:col-span-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="group-card p-4 rounded-xl bg-obsidian/60 border border-borderc hover:border-neon/50 transition-all data-group-1-3 md:col-start-3">
+                                <div class="text-[10px] font-mono text-neon mb-1 uppercase">Група 1-3</div>
+                                <div class="text-xs text-zinc-400 font-mono">7-13т. — практ. з Політ. Географ.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-16 pt-8 border-t border-borderc text-center font-mono text-xs text-zinc-500 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>Одеський національний університет імені І.І. Мечникова • Перший курс</div>
+            <div class="text-neon flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-neon"></span>
+                Система розкладу занять (ІСТ)
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Frontend Filter Logic Script -->
+    <script>
+        function switchGroup(groupCode) {
+            // Update active tab styles
+            document.querySelectorAll('.group-tab').forEach(tab => {
+                tab.classList.remove('bg-neon', 'text-obsidian', 'font-bold');
+                tab.classList.add('text-zinc-400');
+            });
+            const activeBtn = document.getElementById('btn-' + groupCode);
+            activeBtn.classList.remove('text-zinc-400');
+            activeBtn.classList.add('bg-neon', 'text-obsidian', 'font-bold');
+
+            // Filter cards
+            const allCards = document.querySelectorAll('.group-card');
+            
+            if (groupCode === 'all') {
+                allCards.forEach(card => {
+                    card.style.display = 'block';
+                    card.style.opacity = '1';
                 });
+                return;
+            }
 
-                daySection.innerHTML = `
-                    <div class="day-header">
-                        <span>${dayData.day}</span>
-                    </div>
-                    <div class="lessons-list">
-                        ${lessonsHTML}
-                    </div>
-                `;
-
-                container.appendChild(daySection);
+            allCards.forEach(card => {
+                const classes = card.className;
+                // Check if card belongs to this group or spans multiple/all groups
+                if (classes.includes(`data-group-${groupCode}`) || classes.includes('md:col-span-2') || classes.includes('md:col-span-3') || classes.includes('Усі групи')) {
+                    card.style.display = 'block';
+                    setTimeout(() => card.style.opacity = '1', 50);
+                } else {
+                    card.style.opacity = '0';
+                    setTimeout(() => card.style.display = 'none', 200);
+                }
             });
         }
-
-        function filterGroup(group) {
-            document.querySelectorAll('.group-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            renderSchedule(group);
-        }
-
-        // Initial render
-        renderSchedule('all');
     </script>
 </body>
 </html>

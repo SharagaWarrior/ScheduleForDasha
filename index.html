@@ -80,6 +80,7 @@
     }
     .period .n{font-size:24px;font-weight:900;line-height:1}
     .period .t{font-size:11px;margin-top:7px;opacity:.85;text-align:center;line-height:1.35}
+    .period .t + .t{margin-top:3px;font-size:10px;opacity:.68}
     .lesson-card{
       background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
       padding:17px 18px;box-shadow:var(--shadow);
@@ -361,7 +362,24 @@ const schedule = {
   }
 };
 
-const romanNames = {I:"I пара",II:"II пара",III:"III пара",IV:"IV пара"};
+const romanNames = {
+  I:"I пара",
+  II:"II пара",
+  III:"III пара",
+  IV:"IV пара"
+};
+const periodTimes = {
+  I:"08:00 – 09:20",
+  II:"09:30 – 10:50",
+  III:"11:20 – 12:40",
+  IV:"12:50 – 14:10"
+};
+const breakTimes = {
+  I:"10 хв. перерва",
+  II:"30 хв. велика перерва",
+  III:"10 хв. перерва",
+  IV:"10 хв. перерва"
+};
 let selectedGroup = "all";
 let selectedDay = "monday";
 
@@ -384,7 +402,11 @@ function render(){
           if(lesson.empty){
             return `
               <div class="lesson">
-                <div class="period"><div class="n">${lesson.p}</div><div class="t">${romanNames[lesson.p]}</div></div>
+                <div class="period">
+                  <div class="n">${lesson.p}</div>
+                  <div class="t">${periodTimes[lesson.p]}</div>
+                  <div class="t">${breakTimes[lesson.p]}</div>
+                </div>
                 <div class="lesson-card empty">Вільно / занять немає</div>
               </div>`;
           }
@@ -392,7 +414,8 @@ function render(){
             <div class="lesson">
               <div class="period">
                 <div class="n">${lesson.p}</div>
-                <div class="t">${romanNames[lesson.p]}<br>${lesson.time}</div>
+                <div class="t">${periodTimes[lesson.p]}</div>
+                <div class="t">${breakTimes[lesson.p]}</div>
               </div>
               <article class="lesson-card">
                 <div class="lesson-head">
